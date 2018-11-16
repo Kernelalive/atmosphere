@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  database:
+    container_name: "eubr-atmosphere_database"
+    build: ./db
+    ports:
+      - 8000:3306
+
+  phpmyadmin:
+     container_name: "eubr-atmosphere_phpmyadmin"
+     image: phpmyadmin/phpmyadmin
+     links:
+       - database:db
+     ports:
+       - 8060:80
+
+  swagger:
+    container_name: "eubr-atmosphere_swagger"
+    image: swaggerapi/swagger-ui
+    environment:
+       API_URL: "http://localhost:8080/v2/api-docs"
+    ports:
+      - 8070:8080

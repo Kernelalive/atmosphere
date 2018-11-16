@@ -1,0 +1,50 @@
+<!--GDPR DATA FLOW-->
+<div th:fragment="dataflow">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">GDPR</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Data Flows</h6>
+
+      <div class="wrapper">
+        <div>
+          <div id="chart-gdpr-data-flows" class="blobox col-12">
+            <div th:replace="this::placeholder-charts"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+
+<div th:fragment="placeholder-charts" class="placeholder-wrapper">
+  <div class="placeholder-inner-wrapper">
+    <div class="diagram-wrapper loading">
+      <div id="diagram-element-1" class="diagram diagram-circle"></div>
+      <div id="diagram-element-2" class="diagram diagram-paral"></div>
+      <div id="diagram-element-3" class="diagram diagram-circle"></div>
+      <div id="diagram-element-4" class="diagram diagram-paral"></div>
+      <div id="diagram-element-5" class="diagram diagram-circle"></div>
+      <div id="diagram-element-6" class="diagram diagram-paral"></div>
+      <div id="diagram-element-7" class="diagram diagram-circle"></div>
+      <div id="diagram-element-8" class="diagram diagram-paral"></div>
+      <div id="diagram-element-9" class="diagram diagram-circle"></div>
+      <div id="diagram-element-10" class="diagram diagram-paral"></div>
+      <div id="diagram-element-11" class="diagram diagram-circle"></div>
+      <div id="diagram-element-12" class="diagram diagram-paral"></div>
+      <div id="diagram-element-13" class="diagram diagram-circle"></div>
+      <div id="diagram-element-14" class="diagram diagram-paral"></div>
+      <div id="diagram-element-15" class="diagram diagram-circle"></div>
+      <div id="diagram-element-16" class="diagram diagram-paral"></div>
+      <div id="diagram-element-17" class="diagram diagram-circle"></div>
+    </div>
+    <div class="diagram-text hide">
+      <div class="diagram-label">No available data to show</div>
+    </div>
+  </div>
+</div>

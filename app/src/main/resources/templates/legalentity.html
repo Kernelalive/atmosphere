@@ -1,0 +1,187 @@
+<!--LEGAL ENTITY LIST-->
+<div th:fragment="list">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a href="/legalentity/add" class="create"><span class="oi oi-plus"></span> Add</a>
+
+      <h4 class="card-title">Legal Entities</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Legal Entity List</h6>
+
+      <ul class="wrapper empty" th:if="${#lists.isEmpty(page.getContent())}">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-document"></span></div>
+          <div class="empty-title">Legal Entities</div>
+          <div class="empty-text">No legal entities available</div>
+        </li>
+      </ul>
+
+      <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Registration No.</th>
+            <th>Vat</th>
+            <th>Country</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="legalentity : ${page.getContent()}">
+            <td><span th:text="${legalentity.name}"></span></td>
+            <td><span th:text="${legalentity.category.name}"></span></td>
+            <td><span th:text="${legalentity.regno}"></span></td>
+            <td><span th:text="${legalentity.vat}"></span></td>
+            <td><span th:if="${legalentity.country != null}" th:text="${legalentity.country.getName()}"></span></td>
+            <td><a th:href="'/legalentity/' + ${legalentity.getId()}">Edit</a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:include="inc :: pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="add">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Legal Entities</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Add a new Legal Entity</h6>
+
+      <div class="wrapper">
+        <form>
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="1" maxlength="128"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="category">Category</label>
+            <select id="category" name="category[id]"  class="form-control" required="required">
+              <option value="">Select Category...</option>
+              <option th:each="val :${legalentitycategories}" th:value="${val.id}" th:text="${val.name}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="regno">Registration No.</label>
+            <input type="text" name="regno" id="regno" class="form-control" placeholder="Registration No." minlength="1" maxlength="128"/>
+          </div>
+
+          <div class="form-group">
+            <label for="vat">Vat</label>
+            <input type="text" name="vat" id="vat" class="form-control" placeholder="Vat" minlength="1" maxlength="128"/>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="address" name="address" id="address" class="form-control" placeholder="Address" minlength="1" maxlength="128"/>
+          </div>
+
+          <div class="form-group">
+            <label for="zip">Zip</label>
+            <input type="text" name="zip" id="zip" class="form-control" placeholder="Zip" minlength="1" maxlength="128"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="country">Country</label>
+            <select id="country" name="country"  class="form-control" required="required">
+              <option value="">Select Country...</option>
+              <option th:each="val :${T(eubrazil.atmosphere.util.Country).values()}" th:value="${val.name()}" th:text="${val.getName()}">
+              </option>
+            </select>
+          </div>
+        </form>
+        <div class="form-group">
+          <button type="button" onclick="addLegalentityHandler()" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="edit">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a class="create" th:onclick="'deleteLegalentityHandler(\'' + ${legalentity.get().getId()} + '\')'"><span class="far fa-trash-alt" ></span> Delete</a>
+
+      <h4 class="card-title">Legal Entities</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Edit Legal Entity</h6>
+
+      <div class="wrapper">
+        <form>
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="1" maxlength="128"
+                   th:value="${legalentity.get().name}"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="category">Category</label>
+            <select id="category" name="category[id]"  class="form-control" required="required">
+              <option value="">Select Category...</option>
+              <option th:each="val :${legalentitycategories}" th:value="${val.id}" th:text="${val.name}"
+                      th:selected="${val.id.equals(legalentity.get().category.id)}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="regno">Registration No.</label>
+            <input type="text" name="regno" id="regno" class="form-control" placeholder="Registration No." minlength="1" maxlength="128"
+                   th:value="${legalentity.get().regno}"/>
+          </div>
+
+          <div class="form-group">
+            <label for="vat">Vat</label>
+            <input type="text" name="vat" id="vat" class="form-control" placeholder="Vat" minlength="1" maxlength="128"
+                   th:value="${legalentity.get().vat}"/>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="address" name="address" id="address" class="form-control" placeholder="Address" minlength="1" maxlength="128"
+                   th:value="${legalentity.get().address}"/>
+          </div>
+
+          <div class="form-group">
+            <label for="zip">Zip</label>
+            <input type="text" name="zip" id="zip" class="form-control" placeholder="Zip" minlength="1" maxlength="128"
+                   th:value="${legalentity.get().zip}"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="country">Country</label>
+            <select id="country" name="country"  class="form-control" required="required">
+              <option value="">Select Country...</option>
+              <option th:each="val :${T(eubrazil.atmosphere.util.Country).values()}" th:value="${val.name()}" th:text="${val.getName()}"
+                      th:selected="${val == legalentity.get().country}">
+              </option>
+            </select>
+          </div>
+        </form>
+
+        <div class="form-group">
+          <button type="button" th:onclick="'editLegalentityHandler(\'' + ${legalentity.get().getId()} + '\')'" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>

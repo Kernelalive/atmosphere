@@ -1,0 +1,19 @@
+# Template caching
+spring:
+  datasource:
+    url: ${DATABASE}
+    username: app
+    password: 'rfEofrL1BnZuA7PMOyNz5Fq5zD10Wa24'
+    driverClassName: com.mysql.cj.jdbc.Driver
+    initialize: false
+
+## Show or not log for each sql query
+    show-sql: false
+
+# Hibernate settings are prefixed with spring.jpa.hibernate.*   // create, update or none
+    hibernate:
+      ddl-auto: update
+
+# Logging
+logging:
+  config: classpath:log4j2-production.yml

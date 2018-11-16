@@ -1,0 +1,155 @@
+<!--PII LIST-->
+<div th:fragment="list">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a href="/pii/add" class="create"><span class="oi oi-plus"></span> Add</a>
+
+      <h4 class="card-title">Personally Identifiable Information Items</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Piii List</h6>
+
+      <ul class="wrapper empty" th:if="${#lists.isEmpty(page.getContent())}">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-document"></span></div>
+          <div class="empty-title">Personally Identifiable Information Items</div>
+          <div class="empty-text">No piiis available</div>
+        </li>
+      </ul>
+
+      <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Identification</th>
+            <th>Category</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="pii : ${page.getContent()}">
+            <td><span th:text="${pii.name}"></span></td>
+            <td><span th:text="${pii.type.getDescription()}"></span></td>
+            <td><span th:text="${pii.identification}"></span></td>
+            <td><span th:text="${pii.category.name}"></span></td>
+            <td><a th:href="'/pii/' + ${pii.getId()}">Edit</a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:include="inc :: pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="add">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Personally Identifiable Information items</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Add a new Piii</h6>
+
+      <div class="wrapper">
+        <form>
+
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="type">Type</label>
+            <select id="type" name="type"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${piiTypes}" th:value = "${val}" th:text = "${val.getDescription()}" />
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="identification">Identification</label>
+            <select id="identification" name="identification"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${piiIdentifications}" th:value = "${val}" th:text = "${val}" />
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="category">Category</label>
+            <select id="category" name="category[id]"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${piiCategories}" th:value = "${val.id}" th:text = "${val.name}" />
+            </select>
+          </div>
+
+        </form>
+        <div class="form-group">
+          <button type="button" onclick="addPiiHandler()" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="edit">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a class="create" th:onclick="'deletePiiHandler(\'' + ${pii.get().getId()} + '\')'"><span class="far fa-trash-alt" ></span> Delete</a>
+
+      <h4 class="card-title">Personally Identifiable Information Items</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Edit Piii</h6>
+
+      <div class="wrapper">
+        <form>
+
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="1" maxlength="255"
+                   th:value="${pii.get().name}"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="type">Type</label>
+            <select id="type" name="type"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${piiTypes}" th:value = "${val}" th:text = "${val.getDescription()}" th:selected = "${val.equals(pii.get().type)}"/>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="identification">Identification</label>
+            <select id="identification" name="identification"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${piiIdentifications}" th:value = "${val}" th:text = "${val}" th:selected = "${val.equals(pii.get().identification)}"/>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="category">Category</label>
+            <select id="category" name="category[id]"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${piiCategories}" th:value = "${val.id}" th:text = "${val.name}" th:selected = "${val.id.equals(pii.get().category.id)}"/>
+            </select>
+          </div>
+
+        </form>
+
+        <div class="form-group">
+          <button type="button" th:onclick="'editPiiHandler(\'' + ${pii.get().getId()} + '\')'" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>

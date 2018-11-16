@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+
+  app:
+    container_name: "eubr-atmosphere_app"
+    build: ./app
+    environment:
+      DATABASE: "jdbc:mysql://database:3306/atmosphere?useEncoding=true&useSSL=false&characterEncoding=UTF-8&useTimezone=true&&serverTimezone=UTC"
+      SPRING_PROFILES_ACTIVE: production
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  database:
+    container_name: "eubr-atmosphere_database"
+    build: ./db
+    ports:
+      - 8000:3306
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  phpmyadmin:
+     container_name: "eubr-atmosphere_phpmyadmin"
+     image: phpmyadmin/phpmyadmin
+     links:
+       - database:db
+     ports:
+       - 8060:80
+     restart: always
+     logging:
+       options:
+         max-size: "10m"
+         max-file: "10"
+
+  swagger:
+    container_name: "eubr-atmosphere_swagger"
+    image: swaggerapi/swagger-ui
+    environment:
+       API_URL: "http://localhost:8080/v2/api-docs"
+    ports:
+      - 8070:8080
+    links:
+      - app
+    restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"

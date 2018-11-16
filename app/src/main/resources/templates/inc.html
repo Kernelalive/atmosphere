@@ -1,0 +1,132 @@
+<!--HEADER-->
+<div id="header" th:fragment="header">
+  <div id="loader-full">
+    <div class="loader-inner ball-pulse">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <div class="container">
+    <a href="/">
+      <div class="logo"></div>
+    </a>
+    <div class="top-menu">
+      <ul sec:authorize="isAnonymous()">
+        <li><a href="/login"><span></span> <span th:text="#{header.button.login}">Sign In/Register</span></a></li>
+      </ul>
+      <ul sec:authorize="isAuthenticated()">
+        <li><a id="menu-dashboard" href="/dashboard"><span>Dashboard</span></a>
+        </li>
+        <li><a id="menu-admin" sec:authorize="${hasAnyRole('OWNER')}" href="/users"><span>Admin</span></a></li>
+        <li class="dropdown">
+          <a href="javascript:void(0)"><i class="fas fa-user-circle fa-lg"></i>&nbsp;</a>
+          <div class="dropdown-content">
+            <div id="header-username">Signed in as <strong sec:authentication="name"></strong></div>
+            <hr/>
+            <a href="/account/profile/edit"><span>Account</span></a>
+            <a href="#" onclick="logout()"><span>Logout</span></a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!--HOME-->
+<div th:fragment="content" th:remove="tag">
+  <div id="home" class="container">
+    <section id="sidebar" class="home">
+      <h5 th:text="#{index.content.title}">Title</h5>
+      <ul>
+        <li th:text="#{index.content.desc}">Description</li>
+      </ul>
+      <div class="widget"><span class="highlight" th:text="#{index.content.widget1.title}">Feature 1</span><br/><span
+          th:text="#{index.content.widget1.desc}">Feature.</span></div>
+      <div class="widget"><span class="highlight" th:text="#{index.content.widget2.title}">Feature 2</span><br/><span
+          th:text="#{index.content.widget2.desc}">Feature.</span></div>
+      <div class="widget"><span class="highlight" th:text="#{index.content.widget3.title}">Feature 3</span><br/><span
+          th:text="#{index.content.widget3.desc}">Feature.</span></div>
+      <div class="widget"><span class="highlight" th:text="#{index.content.widget4.title}">Feature 4</span><br/><span
+          th:text="#{index.content.widget4.desc}">Feature.</span></div>
+
+
+    <!--Multilingual-->
+    <div>
+      <select id="lang" onchange="setLocale()" class="lang">
+        <option value="en_US">English</option>
+        <option value="el_GR">Ελληνικά</option>
+        <option value="es_AR">Español</option>
+      </select>
+    </div>
+    <!--/Multilingual-->
+    </section>
+  </div>
+
+  <!--Multilingual-->
+  <script th:inline="javascript">
+    document.getElementById("lang").value = [[${lang}]];
+  </script>
+  <!--/Multilingual-->
+
+</div>
+
+<!--SIDEBAR-DASHBOARD-->
+<div th:fragment="sidebar-dashboard" th:remove="tag">
+  <section id="sidebar">
+    <ul>
+      <li class="title">Dashboard</li>
+      <li id="side-menu-dashboard"><a href="/dashboard"><span class="oi oi-dashboard"></span> <span>Overview</span></a></li>
+      <li id="side-menu-privacy-assessment"><a href="/pii"><span class="fa fa-user-secret"></span> <span>Privacy Assessment</span></a>
+        <ul class="sidebar-sub-menu">
+          <li><a id="side-sub-menu-piis" href="/pii"><span>Personally Identifiable Information Items</span></a></li>
+          <li><a id="side-sub-menu-data-subjects" href="/datasubject"><span>Data Subjects</span></a></li>
+          <li><a id="side-sub-menu-legal-grounds" href="/legalground"><span>Legal Grounds</span></a></li>
+          <li><a id="side-sub-menu-legal-entities" href="/legalentity"><span>Legal Entities</span></a></li>
+          <li><a id="side-sub-menu-processing-type-categories" href="/processingtypecategory"><span>Processing Type Categories</span></a></li>
+          <li><a id="side-sub-menu-processing-activities" href="/processingactivity"><span></span>Processing Activities</a></li>
+          <li><a id="side-sub-menu-data-flows" href="/gdpr-dataflow"><span>Data Flows</span></a></li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+</div>
+
+<!--SIDEBAR-ACCOUNT-->
+<div th:fragment="sidebar-account" th:remove="tag">
+  <section id="sidebar">
+    <ul>
+      <li class="title">Account</li>
+      <li id="side-menu-profile"><a href="/account/profile/edit"><span class="oi oi-person"></span>
+        <span>Profile</span></a></li>
+      <li id="side-menu-password"><a href="/account/password/edit"><span class="oi oi-key"></span>
+        <span>Password</span></a></li>
+    </ul>
+  </section>
+</div>
+
+<!--SIDEBAR-ADMIN-->
+<div th:fragment="sidebar-admin" th:remove="tag">
+  <section id="sidebar">
+    <ul sec:authorize="${hasAnyRole('OWNER')}">
+      <li class="title">Admin</li>
+      <li id="side-menu-user"><a href="/users"><span class="oi oi-person"></span> <span>Users</span></a></li>
+    </ul>
+  </section>
+</div>
+
+<!--PAGINATION-->
+<div th:fragment="pagination">
+  <ul th:if="${(page != null) and (page.items != null) and (#arrays.length(page.items) > 1)}"  class="pagination justify-content-center">
+    <li class="page-item" th:classappend="${page.hasPreviousPage()} ? '' : 'disabled'">
+      <a class="page-link" th:href="@{${page.url}(page=${page.number - 1},size=${page.size})}" title="Go to previous page">Previous</a>
+    </li>
+    <li class="page-item disabled">
+      <a class="page-link" th:text="${page.getNumber() + 1} + ' of ' + ${page.getTotalPages()}"> </a>
+    </li>
+    <li class="page-item" th:classappend="${page.hasNextPage()}? '' : 'disabled'">
+      <a class="page-link" th:href="@{${page.url}(page=${page.number + 1},size=${page.size})}" title="Go to next page">Next</a>
+    </li>
+  </ul>
+</div>

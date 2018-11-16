@@ -1,0 +1,18 @@
+<div th:fragment="home">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+      <h4 class="card-title">Dashboard</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Platform Overview</h6>
+      <ul class="wrapper empty">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-dashboard"></span></div>
+          <div class="empty-title">Welcome</div>
+          <div class="empty-text" sec:authentication="name"></div>
+        </li>
+      </ul>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,316 @@
+<!--PROCESSING ACTIVITY LIST-->
+<div th:fragment="list">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a href="/processingactivity/add" class="create"><span class="oi oi-plus"></span> Add</a>
+
+      <h4 class="card-title">Processing Activities</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Processing Activity List</h6>
+
+      <ul class="wrapper empty" th:if="${#lists.isEmpty(page.getContent())}">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-document"></span></div>
+          <div class="empty-title">Processing Activities</div>
+          <div class="empty-text">No processing activities available</div>
+        </li>
+      </ul>
+
+      <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Controller</th>
+            <th>Processors</th>
+            <th>Processing Countries</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="processingactivity : ${page.getContent()}">
+            <td><span th:text="${processingactivity.name}"></span></td>
+            <td><span th:text="${processingactivity.controller.name}"></span></td>
+            <td><span th:each="processor, iterationStatus : ${processingactivity.processors}" th:text="${processor.name + ((iterationStatus.index!=processingactivity.processors.size()-1)? ', ' : '')}"></span></td>
+            <td><span th:each="country, iterationStatus : ${processingactivity.processingcountries}" th:text="${country.name + ((iterationStatus.index!=processingactivity.processingcountries.size()-1)? ', ' : '')}"></span></td>
+            <td><span th:text="${processingactivity.description}"></span></td>
+            <td><a th:href="'/processingactivity/' + ${processingactivity.getId()}">Edit</a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:include="inc :: pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="add">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Processing Activities</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Add a new Processing Activity</h6>
+
+      <div class="wrapper">
+        <form>
+          <input th:if="${processingactivity.isPresent()}" type="hidden" class="layout-hack"/>
+          <input th:if="${processingactivity.isPresent()}" th:value="${processingactivity.get().id}" type="hidden" name="id" id="id"/>
+          <input value="18" type="hidden" id="assetcategoryid" name="assetcategoryid"/>
+
+
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="6" maxlength="128"
+                   th:value="${processingactivity.isPresent()} ? ${processingactivity.get().name}"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="controllers">Data Controller</label>
+            <select id="controllers" name="controllers[]"  class="form-control" required="required" >
+              <option value="">Select an option...</option>
+              <optgroup th:each="key : ${legalentitiesmap.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${legalentitiesmap.get(key)}" th:value = "${val.id}" th:text = "${val.name}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="processor">Data Processors</label>
+            <select id="processor" name="processors[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <optgroup th:each="key : ${legalentitiesmap.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${legalentitiesmap.get(key)}" th:value = "${val.id}" th:text = "${val.name}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="processingtypes">Processing Purposes</label>
+            <select id="processingtypes" name="processingtypes[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <option th:each="val : ${processingtypes}" th:value = "${val.id}" th:text = "${val.name}"
+                      th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().processingtypes.contains(val)}"></option>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="legalgrounds">Legal Grounds for Processing</label>
+            <select id="legalgrounds" name="legalgrounds[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <option th:each="val : ${legalgrounds}" th:value = "${val.id}" th:text = "${val.name}"
+                      th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().legalgrounds.contains(val)}"></option>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="recipients">Personal Data Recipient</label>
+            <select id="recipients" name="recipients[]"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <optgroup th:each="key : ${legalentitiesmap.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${legalentitiesmap.get(key)}" th:value = "${val.id}" th:text = "${val.name}"
+                        th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().recipients.contains(val)}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="processingcountries">Processing Countries</label>
+            <select id="processingcountries" name="processingcountries[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <option th:each="val : ${T(eubrazil.atmosphere.util.Country).values()}" th:value = "${val.name()}" th:text = "${val.name}"
+                      th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().processingcountries.contains(T(eubrazil.atmosphere.util.Country).valueOf(val))}"></option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="8" class="form-control" placeholder="Description" minlength="1" maxlength="1024"
+                      th:text="${processingactivity.isPresent()} ? ${processingactivity.get().description}"/>
+          </div>
+
+          <th:block th:include="this :: informationitems (processingactivity=${processingactivity}, datasubjects=${datasubjects})"></th:block>
+
+        </form>
+
+        <br/>
+
+        <div class="form-group">
+          <button type="button" onclick="addProcessingactivityHandler()" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="edit">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a class="create" th:onclick="'deleteProcessingactivityHandler(\'' + ${processingactivity.get().getId()} + '\')'"><span class="far fa-trash-alt" ></span> Delete</a>
+
+      <h4 class="card-title">Processing Activities</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Edit Processing Activity</h6>
+
+      <div class="wrapper">
+        <form>
+          <input th:if="${processingactivity.isPresent()}" type="hidden" class="layout-hack"/>
+          <input th:if="${processingactivity.isPresent()}" th:value="${processingactivity.get().id}" type="hidden" name="id" id="id"/>
+          <input value="18" type="hidden" id="assetcategoryid" name="assetcategoryid"/>
+
+
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="6" maxlength="128"
+                   th:value="${processingactivity.isPresent()} ? ${processingactivity.get().name}"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="controllers">Data Controller</label>
+            <select id="controllers" name="controllers[]"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <optgroup th:each="key : ${legalentitiesmap.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${legalentitiesmap.get(key)}" th:value = "${val.id}" th:text = "${val.name}"
+                        th:selected="${processingactivity.isPresent()} ? ${val.id.equals(processingactivity.get().controller.id)}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="processor">Data Processors</label>
+            <select id="processor" name="processors[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <optgroup th:each="key : ${legalentitiesmap.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${legalentitiesmap.get(key)}" th:value = "${val.id}" th:text = "${val.name}"
+                        th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().processors.contains(val)}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="processingtypes">Processing Purposes</label>
+            <select id="processingtypes" name="processingtypes[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <option th:each="val : ${processingtypes}" th:value = "${val.id}" th:text = "${val.name}"
+                      th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().processingtypes.contains(val)}"></option>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="legalgrounds">Legal Grounds for Processing</label>
+            <select id="legalgrounds" name="legalgrounds[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <option th:each="val : ${legalgrounds}" th:value = "${val.id}" th:text = "${val.name}"
+                      th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().legalgrounds.contains(val)}"></option>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="recipients">Personal Data Recipient</label>
+            <select id="recipients" name="recipients[]"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <optgroup th:each="key : ${legalentitiesmap.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${legalentitiesmap.get(key)}" th:value = "${val.id}" th:text = "${val.name}"
+                        th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().recipients.contains(val)}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group required">
+            <label for="processingcountries">Processing Countries</label>
+            <select id="processingcountries" name="processingcountries[]"  class="form-control" required="required" multiple="multiple">
+              <option value="">Select an option...</option>
+              <option th:each="val : ${T(eubrazil.atmosphere.util.Country).values()}" th:value = "${val.name()}" th:text = "${val.name}"
+                      th:selected="${processingactivity.isPresent()} ? ${processingactivity.get().processingcountries.contains(T(eubrazil.atmosphere.util.Country).valueOf(val))}"></option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="8" class="form-control" placeholder="Description" minlength="1" maxlength="1024"
+                      th:text="${processingactivity.isPresent()} ? ${processingactivity.get().description}"/>
+          </div>
+
+          <th:block th:include="this :: informationitems (processingactivity=${processingactivity}, datasubjects=${datasubjects})"></th:block>
+
+        </form>
+
+        <br/>
+        <div class="form-group">
+          <button type="button" th:onclick="'editProcessingactivityHandler(\'' + ${processingactivity.get().getId()} + '\')'" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+
+<th:block th:fragment="informationitems(processingactivity,datasubjects)">
+
+  <fieldset class="fieldset-wrapper informationitem-wrapper">
+
+    <div class="table">
+      <div class="form-group">
+        <label for="datasubject">Data Subject</label>
+        <select id="datasubject" class="form-control" onchange="datasubjectOnChange(this)">
+          <option value="">Select an option</option>
+          <option th:each="data : ${datasubjects}" th:value="${data.id}" th:text="${data.name}"></option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="pii">Personally Identifiable Information</label>
+        <select id="pii" class="form-control" disabled="disabled" data-placeholder="Select first a Data Subject">
+          <option value=""></option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <button id="btn-addInformationItem" type="button" class="btn" onclick="addInformationItem()">Add to list</button>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="table-wrapper" th:classappend="${processingactivity.isPresent() ? (#lists.isEmpty(processingactivity.get().getInformationitems()) ? 'hidden' : '') : 'hidden'}">
+      <table>
+        <thead>
+        <tr>
+          <th>Data Subject</th>
+          <th style="overflow: visible;">Personally Identifiable Information</th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <th:block th:if="${processingactivity.isPresent()}">
+          <tr th:each="data, key : ${processingactivity.get().getInformationitems()}">
+            <td th:inline="text"><input type="hidden" name="informationitems[][datasubject]" th:value="${data.datasubject.id}"/>[[${data.datasubject.name}]]</td>
+            <td th:inline="text"><input type="hidden" name="informationitems[][pii]" th:value="${data.pii.id}"/>[[${data.pii.name}]]</td>
+
+            <td class="click action">
+              <div class="button-wrapper">
+                <button th:id="'th-informationitem-btn-' + ${key.index}" class="btn" onclick="removeInformationItem(this)">Remove</button>
+              </div>
+            </td>
+          </tr>
+        </th:block>
+        </tbody>
+      </table>
+
+    </div>
+
+  </fieldset>
+
+</th:block>

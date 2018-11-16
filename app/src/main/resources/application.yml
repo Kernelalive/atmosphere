@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  session:
+    tracking-modes: cookie
+
+# Template caching
+spring:
+  thymeleaf:
+    cache: false
+    check-template-location: true
+  template:
+    cache: false
+  datasource:
+    url: jdbc:mysql://localhost:8000/atmosphere?useEncoding=true&useSSL=false&characterEncoding=UTF-8&useTimezone=true&&serverTimezone=UTC
+    username: app
+    password: 'rfEofrL1BnZuA7PMOyNz5Fq5zD10Wa24'
+    driverClassName: com.mysql.cj.jdbc.Driver
+    initialize: false
+
+## Configuring auto reconnect
+    testOnBorrow: true
+    validationQuery: SELECT 1
+
+## Specify the DBMS-Type
+  jpa:
+    database: MYSQL
+
+## Show or not log for each sql query
+    show-sql: false
+
+# Hibernate settings are prefixed with spring.jpa.hibernate.*   // create, update or none
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQLInnoDBDialect
+      naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
+
+## Token to encrypt
+token:
+  signer:
+    secret: eubr-atmosphere-application-architeture-token-signer-secret
+
+# Multipart
+multipart:
+  maxFileSize: 70045788
+  maxRequestSize: 70045788
+
+################
+# MESSAGE SOURCE
+################
+message:
+  source:
+    basename: i18n/messages
+
+######################
+# APPLICATION SETTINGS
+######################
+app:
+  settings:
+    timezone: Europe/Athens

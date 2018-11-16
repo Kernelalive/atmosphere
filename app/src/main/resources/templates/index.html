@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Atmosphere</title>
+
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+  <link href="/webjars/bootstrap/4.0.0/dist/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+  <link href="/webjars/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css" rel="stylesheet" media="screen"/>
+  <link href="/webjars/font-awesome/5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet"/>
+  <link href="/webjars/select2/4.0.5/dist/css/select2.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/dashboard.css"/>
+</head>
+
+<body>
+<input id="redirect-to-page" th:if="${redirectToPage}" type="hidden" th:value="${redirectToPage}"/>
+
+<div id="header-wrapper"></div>
+<div id="content"></div>
+
+<script src="/webjars/jquery/3.2.1/dist/jquery.min.js"></script>
+<script src="/webjars/popper.js//1.13.0/dist/umd/popper.min.js"></script>
+<script src="/webjars/bootstrap/4.0.0/dist/js/bootstrap.min.js"></script>
+<script src="/webjars/page/1.7.1/page.js"></script>
+<script src="/webjars/jquery.serializeJSON/2.8.1/jquery.serializejson.min.js"></script>
+<script src="/webjars/alertify.js/1.0.10/dist/js/alertify.js"></script>
+<script src="/webjars/select2/4.0.5/dist/js/select2.min.js"></script>
+<script src="/webjars/highcharts/6.1.2/highcharts.js"></script>
+<script src="/webjars/highcharts/6.1.2/modules/sankey.js"></script>
+
+<script src="/js/app.js" th:src="@{/js/app.js}"></script>
+<script src="/js/header.js" th:src="@{/js/header.js}"></script>
+<script src="/js/home.js" th:src="@{/js/home.js}"></script>
+<script src="/js/error.js" th:src="@{/js/error.js}"></script>
+<script src="/js/auth.js" th:src="@{/js/auth.js}"></script>
+<script src="/js/dashboard.js" th:src="@{/js/dashboard.js}"></script>
+<script src="/js/account.js" th:src="@{/js/account.js}"></script>
+<script src="/js/user.js" th:src="@{/js/user.js}"></script>
+<script src="/js/datasubject.js" th:src="@{/js/datasubject.js}"></script>
+<script src="/js/legalground.js" th:src="@{/js/legalground.js}"></script>
+<script src="/js/legalentity.js" th:src="@{/js/legalentity.js}"></script>
+<script src="/js/processingtypecategory.js" th:src="@{/js/processingtypecategory.js}"></script>
+<script src="/js/processingactivity.js" th:src="@{/js/processingactivity.js}"></script>
+<script src="/js/gdpr.js" th:src="@{/js/gdpr.js}"></script>
+<script src="/js/pii.js" th:src="@{/js/pii.js}"></script>
+
+<script src="/js/router.js" th:src="@{/js/router.js}"></script>
+
+<script th:if="__${#locale}__ == 'en_US'" src="/js/messages/messages_en_US.js" th:src="@{/js/messages/messages_en_US.js}"></script>
+<script th:if="__${#locale}__ == 'el_GR'" src="/js/messages/messages_el_gr.js" th:src="@{/js/messages/messages_el_GR.js}"></script>
+<script th:if="__${#locale}__ == 'es_AR'" src="/js/messages/messages_es_AR.js" th:src="@{/js/messages/messages_es_AR.js}"></script>
+
+</body>
+</html>

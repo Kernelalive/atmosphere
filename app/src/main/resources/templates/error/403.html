@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Error</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+  <link href="/webjars/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css" rel="stylesheet" media="screen"/>
+  <link rel="stylesheet" href="/css/dashboard.css"/>
+</head>
+<body>
+<div id="content" th:fragment="page">
+  <div id="container">
+    <section id="main" class="error">
+      <img src="/images/error.png"/>
+      <h4>Error!!1<br/><small>403 Forbidden Error</small></h4>
+      <h5>You shouldn't be here!</h5>
+      <div th:replace="auth::footer"></div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

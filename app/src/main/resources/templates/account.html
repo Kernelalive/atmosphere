@@ -1,0 +1,70 @@
+<!--ACCOUNT PROFILE EDIT-->
+<div th:fragment="profile-edit-info">
+  <div class="container">
+
+    <div th:include="inc::sidebar-account"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Account</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Profile</h6>
+
+      <div class="wrapper">
+        <form>
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input id="fullName" name="fullName" th:value="${user.getFullName()}" type="text" class="form-control"/>
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username" th:value="${user.getUsername()}" disabled="disabled" class="form-control"/>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" th:value="${user.getEmail()}" disabled="disabled" class="form-control"/>
+          </div>
+
+          <button type="button" onclick="editAccountProfileHandler()" class="btn btn-primary">Update</button>
+        </form>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!--ACCOUNT PASSWORD EDIT-->
+<div th:fragment="profile-edit-password">
+  <div class="container">
+
+    <div th:include="inc::sidebar-account"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Account</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Password</h6>
+
+      <div class="wrapper">
+        <form>
+          <div class="form-group">
+            <div class="form-group">
+              <label for="oldPassword">Old password</label>
+              <input id="oldPassword" name="oldPassword" type="password" class="form-control"/>
+            </div>
+            <div class="form-group">
+              <label for="newPassword">New password</label>
+              <input id="newPassword" name="newPassword" type="password" class="form-control"/>
+            </div>
+            <div class="form-group">
+              <label for="matchingPassword">Confirm new password</label>
+              <input id="matchingPassword" name="matchingPassword" type="password" class="form-control"/>
+            </div>
+          </div>
+
+          <button type="button" onclick="editAccountPasswordHandler()" class="btn btn-primary">Update</button>
+        </form>
+      </div>
+
+    </section>
+  </div>
+</div>
+

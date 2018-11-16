@@ -1,0 +1,111 @@
+<!--PROCESSING TYPE CATEGORY LIST-->
+<div th:fragment="list">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a href="/processingtypecategory/add" class="create"><span class="oi oi-plus"></span> Add</a>
+
+      <h4 class="card-title">Processing Type Categories</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Processing Type Category List</h6>
+
+      <ul class="wrapper empty" th:if="${#lists.isEmpty(page.getContent())}">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-document"></span></div>
+          <div class="empty-title">Processing Type Categories</div>
+          <div class="empty-text">No processing type categories available</div>
+        </li>
+      </ul>
+
+      <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="processingtypecategory : ${page.getContent()}">
+            <td><span th:text="${processingtypecategory.name}"></span></td>
+            <td><span th:text="${processingtypecategory.description}"></span></td>
+            <td><a th:href="'/processingtypecategory/' + ${processingtypecategory.getId()}">Edit</a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:include="inc :: pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="add">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Processing Type Categories</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Add a new Processing Type Category</h6>
+
+      <div class="wrapper">
+        <form>
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="1" maxlength="128"/>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="8" class="form-control" placeholder="Description" minlength="1" maxlength="1024"/>
+          </div>
+
+        </form>
+        <div class="form-group">
+          <button type="button" onclick="addProcessingtypecategoryHandler()" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="edit">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a class="create" th:onclick="'deleteProcessingtypecategoryHandler(\'' + ${processingtypecategory.get().getId()} + '\')'"><span class="far fa-trash-alt" ></span> Delete</a>
+
+      <h4 class="card-title">Processing Type Categories</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Edit Processing Type Category</h6>
+
+      <div class="wrapper">
+        <form>
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="1" maxlength="128"
+                   th:value="${processingtypecategory.get().name}"/>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="8" class="form-control" placeholder="Description" minlength="1" maxlength="1024"
+                      th:text="${processingtypecategory.get().description}"/>
+          </div>
+        </form>
+
+        <div class="form-group">
+          <button type="button" th:onclick="'editProcessingtypecategoryHandler(\'' + ${processingtypecategory.get().getId()} + '\')'" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>

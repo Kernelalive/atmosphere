@@ -1,0 +1,130 @@
+<!--LEGAL GROUND LIST-->
+<div th:fragment="list">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a href="/legalground/add" class="create"><span class="oi oi-plus"></span> Add</a>
+
+      <h4 class="card-title">Legal Grounds</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Legal Ground List</h6>
+
+      <ul class="wrapper empty" th:if="${#lists.isEmpty(page.getContent())}">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-document"></span></div>
+          <div class="empty-title">Legal Grounds</div>
+          <div class="empty-text">No legal grounds available</div>
+        </li>
+      </ul>
+
+      <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Comments</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="legalground : ${page.getContent()}">
+            <td><span th:text="${legalground.name}"></span></td>
+            <td><span th:text="${legalground.legalgroundtype.name}"></span></td>
+            <td><span th:text="${legalground.comments}"></span></td>
+            <td><a th:href="'/legalground/' + ${legalground.getId()}">Edit</a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:include="inc :: pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="add">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Legal Grounds</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Add a new Legal Ground</h6>
+
+      <div class="wrapper">
+        <form>
+
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="1" maxlength="255"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="legalgroundtype">Type</label>
+            <select id="legalgroundtype" name="legalgroundtype[id]"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${legalgroundtypes}" th:value = "${val.id}" th:text = "${val.name}" />
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="comments">Comments</label>
+            <textarea name="comments" id="comments" rows="8" class="form-control" placeholder="Comments" minlength="1" maxlength="1024"/>
+          </div>
+        </form>
+        <div class="form-group">
+          <button type="button" onclick="addLegalgroundHandler()" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="edit">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a class="create" th:onclick="'deleteLegalgroundHandler(\'' + ${legalground.get().getId()} + '\')'"><span class="far fa-trash-alt" ></span> Delete</a>
+
+      <h4 class="card-title">Legal Grounds</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Edit Legal Ground</h6>
+
+      <div class="wrapper">
+        <form>
+
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required="required" minlength="1" maxlength="255"
+                   th:value="${legalground.get().name}"/>
+          </div>
+
+          <div class="form-group required">
+            <label for="legalgroundtype">Type</label>
+            <select id="legalgroundtype" name="legalgroundtype[id]"  class="form-control" required="required">
+              <option value="">Select an option...</option>
+              <option th:each = "val : ${legalgroundtypes}" th:value = "${val.id}" th:text = "${val.name}" th:selected = "${val.id.equals(legalground.get().legalgroundtype.id)}"/>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="comments">Comments</label>
+            <textarea name="comments" id="comments" rows="8" class="form-control" placeholder="Comments" minlength="1" maxlength="1024"
+                      th:text="${legalground.get().comments}"/>
+          </div>
+        </form>
+
+        <div class="form-group">
+          <button type="button" th:onclick="'editLegalgroundHandler(\'' + ${legalground.get().getId()} + '\')'" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>

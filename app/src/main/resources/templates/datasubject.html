@@ -1,0 +1,146 @@
+<!--DATA SUBJECTS LIST-->
+<div th:fragment="list">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a href="/datasubject/add" class="create"><span class="oi oi-plus"></span> Add</a>
+
+      <h4 class="card-title">Data Subjects</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Data Subject List</h6>
+
+      <ul class="wrapper empty" th:if="${#lists.isEmpty(page.getContent())}">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-document"></span></div>
+          <div class="empty-title">Data Subjects</div>
+          <div class="empty-text">No data subjects available</div>
+        </li>
+      </ul>
+
+      <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="datasubject : ${page.getContent()}">
+            <!-- title column -->
+            <td><span
+              th:text="${datasubject.getName()}"></span>
+            </td>
+            <!-- body column -->
+            <td><a th:href="'/datasubject/' + ${datasubject.getId()}">Edit</a></td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:include="inc :: pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="add">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <h4 class="card-title">Data Subjects</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Add a new Data Subject</h6>
+
+      <div class="wrapper">
+        <form>
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" class="form-control" autocomplete="off"
+                   autofocus="autofocus" required="required" minlength="1" maxlength="128" placeholder="Name"/>
+          </div>
+
+          <div class="form-group">
+            <label for="piis">Personally Identifiable Information items</label>
+            <select class="form-control" id="piis" multiple="multiple" data-placeholder="Select one or more PIIs">
+              <option value=""></option>
+              <optgroup th:each="key : ${piis.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${piis.get(key)}" th:value = "${val.id}" th:text = "${val.name}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="piisSpecial">Sensitive Identifiable Information items</label>
+            <select class="form-control" id="piisSpecial" multiple="multiple" data-placeholder="Select one or more PIIs">
+              <option value=""></option>
+              <optgroup th:each="key : ${piisSpecial.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${piisSpecial.get(key)}" th:value = "${val.id}" th:text = "${val.name}"></option>
+              </optgroup>
+            </select>
+          </div>
+        </form>
+
+        <div class="form-group">
+          <button type="button" onclick="addDatasubjectHandler()" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>
+
+<div th:fragment="edit">
+  <div class="container">
+
+    <div th:include="inc::sidebar-dashboard"></div>
+
+    <section id="main">
+
+      <a class="create" th:onclick="'deleteDatasubjectHandler(\'' + ${datasubject.get().getId()} + '\')'"><span class="far fa-trash-alt" ></span> Delete</a>
+
+      <h4 class="card-title">Data Subjects</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Edit Data Subject</h6>
+
+      <div class="wrapper">
+        <form>
+
+          <div class="form-group required">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" class="form-control" autocomplete="off"
+                   autofocus="autofocus" required="required" minlength="1" maxlength="128" th:value="${datasubject.get().name}" placeholder="Name"/>
+          </div>
+
+          <div class="form-group">
+            <label for="piis">Personally Identifiable Information items</label>
+            <select id="piis" name="piis[][id]" class="form-control" multiple="multiple" data-placeholder="Select one or more PIIs">
+              <option value=""></option>
+              <optgroup th:each="key : ${piis.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${piis.get(key)}" th:value = "${val.id}" th:text = "${val.name}"
+                        th:selected="${datasubject.get().piis.contains(val)}"></option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="piisSpecial">Sensitive Identifiable Information items</label>
+            <select id="piisSpecial" name="piis[][id]" class="form-control" multiple="multiple" data-placeholder="Select one or more PIIs">
+              <option value=""></option>
+              <optgroup th:each="key : ${piisSpecial.navigableKeySet()}" th:label="${key.name}">
+                <option th:each="val : ${piisSpecial.get(key)}" th:value = "${val.id}" th:text = "${val.name}"
+                        th:selected="${datasubject.get().piis.contains(val)}"></option>
+              </optgroup>
+            </select>
+          </div>
+        </form>
+
+        <div class="form-group">
+          <button type="button" th:onclick="'editDatasubjectHandler(\'' + ${datasubject.get().getId()} + '\')'" class="btn btn-primary">Save</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</div>

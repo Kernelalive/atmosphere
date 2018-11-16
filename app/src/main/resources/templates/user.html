@@ -1,0 +1,56 @@
+<!--USER LIST-->
+<div th:fragment="list">
+  <div class="container">
+    <div th:include="inc::sidebar-admin"></div>
+    <section id="main">
+      <h4 class="card-title">Admin</h4>
+      <h6 class="card-subtitle mb-2 text-muted">Users</h6>
+
+      <ul class="wrapper empty" th:if="${#lists.isEmpty(page.getContent())}">
+        <li class="item">
+          <div class="empty-icon"><span class="oi oi-person"></span></div>
+          <div class="empty-title">Users</div>
+          <div class="empty-text">No users available</div>
+        </li>
+      </ul>
+
+      <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Enabled</th>
+            <th>Role</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="user : ${page.getContent()}">
+            <!-- username column -->
+            <td><span
+                th:text="${user.getUsername() == authUser.getUsername()} ? ${user.getUsername()} + ' (me)' : ${user.getUsername()}"></span>
+            </td>
+            <!-- email column -->
+            <td><span th:text="${user.getEmail()}"></span></td>
+            <td>
+              <input th:if="${user.getUsername() != authUser.getUsername()}" class="toggle" type="checkbox" th:checked="${user.isEnabled()}"
+                     th:onchange="'editUserStatusHandler(this, \'' + ${user.getUsername()} + '\')'"/>
+            </td>
+            <!-- role column -->
+            <td>
+              <div class="form-inline" th:if="${user.getUsername() != authUser.getUsername()}">
+                <select class="form-control" th:onchange="'editUserRoleHandler(this, \'' + ${user.getUsername()} + '\')'">
+                  <option th:selected="${user.getRoleToString() == 'OWNER'}" th:text="OWNER" value="OWNER"></option>
+                  <option th:selected="${user.getRoleToString() == 'EDITOR'}" th:text="EDITOR" value="EDITOR"></option>
+                  <option th:selected="${user.getRoleToString() == 'VIEWER'}" th:text="VIEWER" value="VIEWER"></option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div th:include="inc :: pagination"></div>
+      </div>
+    </section>
+  </div>
+</div>
